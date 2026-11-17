@@ -1,6 +1,6 @@
 """Compare label-free statistics of degraded open data with those measured on the provided ATD."""
 import numpy as np
-from solution import config, evidence
+from solution import evidence
 from . import opendata as od, degrade as dg
 
 TARGET = dict(present=59.3, gap_3_10=14.6, gap_10_30=41.4, gap_30=43.8, sp_missing=69.0,

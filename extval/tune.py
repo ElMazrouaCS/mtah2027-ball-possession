@@ -47,9 +47,10 @@ GRID = {
 _CASES = None
 
 
-def _init(games, seeds):
+def _init(games, seeds, scenarios):
     global _CASES
-    _CASES = bench.build_cases(games=games, seeds=seeds)
+    _CASES = bench.build_cases(games=games, seeds=seeds,
+                               scenarios={k: bench.SCENARIOS[k] for k in scenarios})
     bench.features_for(_CASES, config.params())
 
 
@@ -78,24 +79,51 @@ def descend(pool, start, sweeps=3, log=print):
 
 
 def main():
+    import os
     ap = argparse.ArgumentParser()
-    ap.add_argument("--holdout", type=int, default=None)
+    ap.add_argument("--games", default="1,2,3", help="training games: 1,2,3 | idsse | all | ids")
+    ap.add_argument("--holdout", default="", help="games scored untouched, same syntax")
+    ap.add_argument("--scenarios", default=",".join(bench.SCENARIOS))
     ap.add_argument("--seeds", type=int, default=1)
-    ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1))
     args = ap.parse_args()
     seeds = tuple(range(args.seeds))
-    train = tuple(g for g in bench.GAMES if g != args.holdout)
+    scen = tuple(args.scenarios.split(","))
+    hold = bench.parse_games(args.holdout) if args.holdout else ()
+    # backwards compatible: "--holdout 3" alone means "tune on the other Metrica games"
+    train = tuple(g for g in bench.parse_games(args.games) if g not in hold)
     start = {k: getattr(config, k) for k in GRID}
+    print("train", train, "| holdout", hold, "| scenarios", scen, "| workers", args.workers)
 
-    with ProcessPoolExecutor(args.workers, initializer=_init, initargs=(train, seeds)) as pool:
+    with ProcessPoolExecutor(args.workers, initializer=_init,
+                             initargs=(train, seeds, scen)) as pool:
         best, score = descend(pool, start)
     print("BEST on games {}: spellF1 {:.4f} macroF1 {:.4f}".format(train, *score))
     print(json.dumps(best))
-    if args.holdout:
-        cases = bench.build_cases(games=(args.holdout,), seeds=seeds)
-        bench.features_for(cases, config.params())
-        bench.summarise(bench.evaluate(cases, config.params()), "HOLDOUT game {} - defaults".format(args.holdout))
-        bench.summarise(bench.evaluate(cases, config.params(**best)), "HOLDOUT game {} - tuned".format(args.holdout))
+    if hold:
+        hc = bench.build_cases(games=hold, seeds=seeds,
+                               scenarios={k: bench.SCENARIOS[k] for k in scen})
+        bench.features_for(hc, config.params())
+        base = [(c["name"], c["game"]) + bench.score(c["gt"], bench.baseline_labels(c["trk"]))
+                for c in hc]
+        cur = bench.evaluate(hc, config.params())
+        tuned = bench.evaluate(hc, config.params(**best))
+        bench.per_game(base, "HOLDOUT - baseline")
+        bench.per_game(cur, "HOLDOUT - current config.py")
+        bench.per_game(tuned, "HOLDOUT - tuned")
+    else:
+        base, cur, tuned = [], [], []
+    from . import records
+    best_hash, _ = records.params_hash(config.params(**best))
+    cur_hash, _ = records.params_hash(config.params())
+    records.save("tune", tuple(train) + tuple(hold), scen, config.params(**best),
+                 records.rows_from("holdout_baseline_smooth50", base)
+                 + records.rows_from("holdout_current_config", cur)
+                 + records.rows_from("holdout_tuned", tuned),
+                 extra=dict(train_games=[str(g) for g in train], holdout_games=[str(g) for g in hold],
+                            train_spell_f1=score[0], train_macro_f1=score[1],
+                            best_overrides=best, best_params_hash=best_hash,
+                            current_params_hash=cur_hash))
 
 
 if __name__ == "__main__":

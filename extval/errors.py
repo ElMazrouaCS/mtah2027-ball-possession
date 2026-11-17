@@ -2,7 +2,6 @@
 import numpy as np
 from solution import config
 from . import bench, train, opendata as od
-import possession_metrics as pm
 
 def spells(lab, blocks):
     out = []

@@ -1,0 +1,638 @@
+{
+ "kind": "bench",
+ "created_utc": "20261117T230723Z",
+ "git": "332cf48",
+ "games": [
+  "J03WMX",
+  "J03WN1",
+  "J03WPY",
+  "J03WOH",
+  "J03WQQ",
+  "J03WOY",
+  "J03WR9"
+ ],
+ "scenarios": [
+  "central",
+  "ball~dead",
+  "ball!~dead",
+  "noisy"
+ ],
+ "params_hash": "507d77804baa",
+ "params": {
+  "BALL_FAR_OUT_M": 5.0,
+  "BALL_MAX_SPEED": 40.0,
+  "BALL_SMOOTH_FRAMES": 5,
+  "COLLECTIVE_SMOOTH_FRAMES": 25,
+  "CONTROL_DIST_M": 1.5,
+  "DEAD_BIAS": -0.5,
+  "DIFF_SCALE_M": 0.5,
+  "FAST_BALL_SPEED": 6.0,
+  "FAST_BALL_W": 2.5,
+  "FLIGHT_FACTOR": 0.0,
+  "FLIGHT_SPEED": 8.0,
+  "FPS": 25,
+  "FROM_DEAD_COST": 16.0,
+  "GAP_LONG_S": 20.0,
+  "GAP_LONG_W": 0.25,
+  "GAP_MIN_S": 0.5,
+  "GAP_W": 1.0,
+  "NEAR_DIST_M": 3.0,
+  "OOB_MARGIN_M": 0.5,
+  "OOB_MIN_FRAMES": 10,
+  "OOB_W": 2.0,
+  "SPEED_REF": 1.8,
+  "SPEED_SCALE": 0.5,
+  "SPEED_W": 0.5,
+  "SP_BEFORE_S": 3.0,
+  "SP_FALLBACK_S": 5.0,
+  "SP_KICK_SPEED": 3.0,
+  "SP_SEARCH_S": 15.0,
+  "SP_W": 1.0,
+  "STRENGTH_CONTROL": 1.0,
+  "STRENGTH_FAR": 0.0,
+  "STRENGTH_NEAR": 0.4,
+  "SWITCH_COST": 28.0,
+  "TAG_OTHER": [
+   "DEFENDING IN DEFENSIVE THIRD",
+   "DEFENDING IN MIDDLE THIRD",
+   "DEFENDING IN ATTACKING THIRD",
+   "DEFENSIVE TRANSITION"
+  ],
+  "TAG_OWN": [
+   "BUILD UP",
+   "PROGRESSION",
+   "CREATING CHANCES",
+   "ATTACKING TRANSITION",
+   "LONG BALL",
+   "BALL IN FINAL THIRD",
+   "BALL IN THE BOX",
+   "PLAYERS IN THE BOX"
+  ],
+  "TAG_W": 0.2,
+  "TERRV_W": 0.1,
+  "TERR_W": 0.1,
+  "TO_DEAD_COST": 24.0
+ },
+ "rows": [
+  {
+   "method": "baseline_smooth50",
+   "scenario": "central",
+   "game": "J03WMX",
+   "dataset": "idsse",
+   "spell_f1": 0.235849,
+   "macro_f1": 0.725595,
+   "n_pred": 549,
+   "n_gt": 511
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "central",
+   "game": "J03WN1",
+   "dataset": "idsse",
+   "spell_f1": 0.236842,
+   "macro_f1": 0.686571,
+   "n_pred": 564,
+   "n_gt": 500
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "central",
+   "game": "J03WPY",
+   "dataset": "idsse",
+   "spell_f1": 0.28,
+   "macro_f1": 0.739798,
+   "n_pred": 529,
+   "n_gt": 421
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "central",
+   "game": "J03WOH",
+   "dataset": "idsse",
+   "spell_f1": 0.260485,
+   "macro_f1": 0.71173,
+   "n_pred": 547,
+   "n_gt": 402
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "central",
+   "game": "J03WQQ",
+   "dataset": "idsse",
+   "spell_f1": 0.309784,
+   "macro_f1": 0.734425,
+   "n_pred": 570,
+   "n_gt": 401
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "central",
+   "game": "J03WOY",
+   "dataset": "idsse",
+   "spell_f1": 0.240647,
+   "macro_f1": 0.703044,
+   "n_pred": 533,
+   "n_gt": 456
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "central",
+   "game": "J03WR9",
+   "dataset": "idsse",
+   "spell_f1": 0.270093,
+   "macro_f1": 0.742362,
+   "n_pred": 486,
+   "n_gt": 370
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "ball~dead",
+   "game": "J03WMX",
+   "dataset": "idsse",
+   "spell_f1": 0.268156,
+   "macro_f1": 0.751079,
+   "n_pred": 563,
+   "n_gt": 511
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "ball~dead",
+   "game": "J03WN1",
+   "dataset": "idsse",
+   "spell_f1": 0.253933,
+   "macro_f1": 0.729294,
+   "n_pred": 568,
+   "n_gt": 500
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "ball~dead",
+   "game": "J03WPY",
+   "dataset": "idsse",
+   "spell_f1": 0.282101,
+   "macro_f1": 0.767835,
+   "n_pred": 512,
+   "n_gt": 421
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "ball~dead",
+   "game": "J03WOH",
+   "dataset": "idsse",
+   "spell_f1": 0.286653,
+   "macro_f1": 0.750624,
+   "n_pred": 572,
+   "n_gt": 402
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "ball~dead",
+   "game": "J03WQQ",
+   "dataset": "idsse",
+   "spell_f1": 0.297951,
+   "macro_f1": 0.752355,
+   "n_pred": 575,
+   "n_gt": 401
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "ball~dead",
+   "game": "J03WOY",
+   "dataset": "idsse",
+   "spell_f1": 0.263376,
+   "macro_f1": 0.739067,
+   "n_pred": 557,
+   "n_gt": 456
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "ball~dead",
+   "game": "J03WR9",
+   "dataset": "idsse",
+   "spell_f1": 0.285514,
+   "macro_f1": 0.76587,
+   "n_pred": 486,
+   "n_gt": 370
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "ball!~dead",
+   "game": "J03WMX",
+   "dataset": "idsse",
+   "spell_f1": 0.223842,
+   "macro_f1": 0.66559,
+   "n_pred": 504,
+   "n_gt": 511
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "ball!~dead",
+   "game": "J03WN1",
+   "dataset": "idsse",
+   "spell_f1": 0.205279,
+   "macro_f1": 0.643566,
+   "n_pred": 523,
+   "n_gt": 500
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "ball!~dead",
+   "game": "J03WPY",
+   "dataset": "idsse",
+   "spell_f1": 0.22252,
+   "macro_f1": 0.681165,
+   "n_pred": 476,
+   "n_gt": 421
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "ball!~dead",
+   "game": "J03WOH",
+   "dataset": "idsse",
+   "spell_f1": 0.234483,
+   "macro_f1": 0.655885,
+   "n_pred": 526,
+   "n_gt": 402
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "ball!~dead",
+   "game": "J03WQQ",
+   "dataset": "idsse",
+   "spell_f1": 0.24377,
+   "macro_f1": 0.659794,
+   "n_pred": 554,
+   "n_gt": 401
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "ball!~dead",
+   "game": "J03WOY",
+   "dataset": "idsse",
+   "spell_f1": 0.214039,
+   "macro_f1": 0.65941,
+   "n_pred": 527,
+   "n_gt": 456
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "ball!~dead",
+   "game": "J03WR9",
+   "dataset": "idsse",
+   "spell_f1": 0.227252,
+   "macro_f1": 0.682463,
+   "n_pred": 496,
+   "n_gt": 370
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "noisy",
+   "game": "J03WMX",
+   "dataset": "idsse",
+   "spell_f1": 0.22782,
+   "macro_f1": 0.720369,
+   "n_pred": 553,
+   "n_gt": 511
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "noisy",
+   "game": "J03WN1",
+   "dataset": "idsse",
+   "spell_f1": 0.229818,
+   "macro_f1": 0.682181,
+   "n_pred": 600,
+   "n_gt": 500
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "noisy",
+   "game": "J03WPY",
+   "dataset": "idsse",
+   "spell_f1": 0.26694,
+   "macro_f1": 0.733395,
+   "n_pred": 556,
+   "n_gt": 421
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "noisy",
+   "game": "J03WOH",
+   "dataset": "idsse",
+   "spell_f1": 0.247242,
+   "macro_f1": 0.706803,
+   "n_pred": 559,
+   "n_gt": 402
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "noisy",
+   "game": "J03WQQ",
+   "dataset": "idsse",
+   "spell_f1": 0.291278,
+   "macro_f1": 0.731432,
+   "n_pred": 585,
+   "n_gt": 401
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "noisy",
+   "game": "J03WOY",
+   "dataset": "idsse",
+   "spell_f1": 0.233205,
+   "macro_f1": 0.700736,
+   "n_pred": 580,
+   "n_gt": 456
+  },
+  {
+   "method": "baseline_smooth50",
+   "scenario": "noisy",
+   "game": "J03WR9",
+   "dataset": "idsse",
+   "spell_f1": 0.25389,
+   "macro_f1": 0.735106,
+   "n_pred": 517,
+   "n_gt": 370
+  },
+  {
+   "method": "ours",
+   "scenario": "central",
+   "game": "J03WMX",
+   "dataset": "idsse",
+   "spell_f1": 0.366897,
+   "macro_f1": 0.84496,
+   "n_pred": 214,
+   "n_gt": 511
+  },
+  {
+   "method": "ours",
+   "scenario": "central",
+   "game": "J03WN1",
+   "dataset": "idsse",
+   "spell_f1": 0.340993,
+   "macro_f1": 0.809158,
+   "n_pred": 205,
+   "n_gt": 500
+  },
+  {
+   "method": "ours",
+   "scenario": "central",
+   "game": "J03WPY",
+   "dataset": "idsse",
+   "spell_f1": 0.434671,
+   "macro_f1": 0.850756,
+   "n_pred": 202,
+   "n_gt": 421
+  },
+  {
+   "method": "ours",
+   "scenario": "central",
+   "game": "J03WOH",
+   "dataset": "idsse",
+   "spell_f1": 0.420339,
+   "macro_f1": 0.847354,
+   "n_pred": 188,
+   "n_gt": 402
+  },
+  {
+   "method": "ours",
+   "scenario": "central",
+   "game": "J03WQQ",
+   "dataset": "idsse",
+   "spell_f1": 0.44129,
+   "macro_f1": 0.8557,
+   "n_pred": 219,
+   "n_gt": 401
+  },
+  {
+   "method": "ours",
+   "scenario": "central",
+   "game": "J03WOY",
+   "dataset": "idsse",
+   "spell_f1": 0.401182,
+   "macro_f1": 0.827023,
+   "n_pred": 221,
+   "n_gt": 456
+  },
+  {
+   "method": "ours",
+   "scenario": "central",
+   "game": "J03WR9",
+   "dataset": "idsse",
+   "spell_f1": 0.423735,
+   "macro_f1": 0.845428,
+   "n_pred": 203,
+   "n_gt": 370
+  },
+  {
+   "method": "ours",
+   "scenario": "ball~dead",
+   "game": "J03WMX",
+   "dataset": "idsse",
+   "spell_f1": 0.408791,
+   "macro_f1": 0.87261,
+   "n_pred": 217,
+   "n_gt": 511
+  },
+  {
+   "method": "ours",
+   "scenario": "ball~dead",
+   "game": "J03WN1",
+   "dataset": "idsse",
+   "spell_f1": 0.388669,
+   "macro_f1": 0.842755,
+   "n_pred": 206,
+   "n_gt": 500
+  },
+  {
+   "method": "ours",
+   "scenario": "ball~dead",
+   "game": "J03WPY",
+   "dataset": "idsse",
+   "spell_f1": 0.43127,
+   "macro_f1": 0.87436,
+   "n_pred": 193,
+   "n_gt": 421
+  },
+  {
+   "method": "ours",
+   "scenario": "ball~dead",
+   "game": "J03WOH",
+   "dataset": "idsse",
+   "spell_f1": 0.473754,
+   "macro_f1": 0.874611,
+   "n_pred": 200,
+   "n_gt": 402
+  },
+  {
+   "method": "ours",
+   "scenario": "ball~dead",
+   "game": "J03WQQ",
+   "dataset": "idsse",
+   "spell_f1": 0.459091,
+   "macro_f1": 0.864547,
+   "n_pred": 215,
+   "n_gt": 401
+  },
+  {
+   "method": "ours",
+   "scenario": "ball~dead",
+   "game": "J03WOY",
+   "dataset": "idsse",
+   "spell_f1": 0.410303,
+   "macro_f1": 0.846694,
+   "n_pred": 204,
+   "n_gt": 456
+  },
+  {
+   "method": "ours",
+   "scenario": "ball~dead",
+   "game": "J03WR9",
+   "dataset": "idsse",
+   "spell_f1": 0.461041,
+   "macro_f1": 0.871855,
+   "n_pred": 187,
+   "n_gt": 370
+  },
+  {
+   "method": "ours",
+   "scenario": "ball!~dead",
+   "game": "J03WMX",
+   "dataset": "idsse",
+   "spell_f1": 0.32,
+   "macro_f1": 0.793452,
+   "n_pred": 204,
+   "n_gt": 511
+  },
+  {
+   "method": "ours",
+   "scenario": "ball!~dead",
+   "game": "J03WN1",
+   "dataset": "idsse",
+   "spell_f1": 0.323919,
+   "macro_f1": 0.781868,
+   "n_pred": 194,
+   "n_gt": 500
+  },
+  {
+   "method": "ours",
+   "scenario": "ball!~dead",
+   "game": "J03WPY",
+   "dataset": "idsse",
+   "spell_f1": 0.382923,
+   "macro_f1": 0.814687,
+   "n_pred": 188,
+   "n_gt": 421
+  },
+  {
+   "method": "ours",
+   "scenario": "ball!~dead",
+   "game": "J03WOH",
+   "dataset": "idsse",
+   "spell_f1": 0.38191,
+   "macro_f1": 0.803532,
+   "n_pred": 195,
+   "n_gt": 402
+  },
+  {
+   "method": "ours",
+   "scenario": "ball!~dead",
+   "game": "J03WQQ",
+   "dataset": "idsse",
+   "spell_f1": 0.430918,
+   "macro_f1": 0.81455,
+   "n_pred": 220,
+   "n_gt": 401
+  },
+  {
+   "method": "ours",
+   "scenario": "ball!~dead",
+   "game": "J03WOY",
+   "dataset": "idsse",
+   "spell_f1": 0.35503,
+   "macro_f1": 0.801374,
+   "n_pred": 220,
+   "n_gt": 456
+  },
+  {
+   "method": "ours",
+   "scenario": "ball!~dead",
+   "game": "J03WR9",
+   "dataset": "idsse",
+   "spell_f1": 0.393007,
+   "macro_f1": 0.806785,
+   "n_pred": 202,
+   "n_gt": 370
+  },
+  {
+   "method": "ours",
+   "scenario": "noisy",
+   "game": "J03WMX",
+   "dataset": "idsse",
+   "spell_f1": 0.334262,
+   "macro_f1": 0.829483,
+   "n_pred": 207,
+   "n_gt": 511
+  },
+  {
+   "method": "ours",
+   "scenario": "noisy",
+   "game": "J03WN1",
+   "dataset": "idsse",
+   "spell_f1": 0.320341,
+   "macro_f1": 0.797803,
+   "n_pred": 203,
+   "n_gt": 500
+  },
+  {
+   "method": "ours",
+   "scenario": "noisy",
+   "game": "J03WPY",
+   "dataset": "idsse",
+   "spell_f1": 0.407754,
+   "macro_f1": 0.838428,
+   "n_pred": 198,
+   "n_gt": 421
+  },
+  {
+   "method": "ours",
+   "scenario": "noisy",
+   "game": "J03WOH",
+   "dataset": "idsse",
+   "spell_f1": 0.377027,
+   "macro_f1": 0.822931,
+   "n_pred": 190,
+   "n_gt": 402
+  },
+  {
+   "method": "ours",
+   "scenario": "noisy",
+   "game": "J03WQQ",
+   "dataset": "idsse",
+   "spell_f1": 0.406504,
+   "macro_f1": 0.83365,
+   "n_pred": 214,
+   "n_gt": 401
+  },
+  {
+   "method": "ours",
+   "scenario": "noisy",
+   "game": "J03WOY",
+   "dataset": "idsse",
+   "spell_f1": 0.364126,
+   "macro_f1": 0.816776,
+   "n_pred": 213,
+   "n_gt": 456
+  },
+  {
+   "method": "ours",
+   "scenario": "noisy",
+   "game": "J03WR9",
+   "dataset": "idsse",
+   "spell_f1": 0.4,
+   "macro_f1": 0.831597,
+   "n_pred": 197,
+   "n_gt": 370
+  }
+ ]
+}

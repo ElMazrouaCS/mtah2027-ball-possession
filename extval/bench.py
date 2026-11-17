@@ -8,10 +8,11 @@ Nothing here reads the competition data.
 import os
 import sys
 import warnings
+import zlib
 
 import numpy as np
 
-from solution import config, evidence, pipeline
+from solution import config, pipeline
 from . import degrade as dg
 from . import opendata as od
 
@@ -19,7 +20,29 @@ HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(HERE, "evaluation"))
 import possession_metrics as pm  # noqa: E402
 
-GAMES = (1, 2, 3)
+GAMES = (1, 2, 3)                      # Metrica open sample games
+
+
+def parse_games(text):
+    """'1,2,3' or 'metrica' -> (1, 2, 3); 'idsse' -> the 7 IDSSE matches; 'all' -> both."""
+    from . import idsse
+    out = []
+    for tok in [t.strip() for t in text.split(",") if t.strip()]:
+        if tok == "all":
+            out += list(GAMES) + list(idsse.MATCHES)
+        elif tok == "metrica":
+            out += list(GAMES)
+        elif tok == "idsse":
+            out += list(idsse.MATCHES)
+        elif tok.isdigit():
+            out.append(int(tok))
+        else:
+            out.append(tok)
+    return tuple(dict.fromkeys(out))
+
+
+def seed_of(g):
+    return 100 * g if isinstance(g, int) else zlib.crc32(g.encode()) % 100000
 # Calibrated on label-free statistics of the provided ATD (diag_step1/2/3): ball-to-nearest-player
 # distances -> ball_offset_m 0.8; Smart Tagging team agreement with clear control ~70-81%.
 _CAL = dict(ball_offset_m=0.8, tag_accuracy=0.75)
@@ -38,10 +61,15 @@ _RAW = {}
 
 def raw_game(g):
     if g not in _RAW:
-        e = od.events(g)
-        trk = od.tracking(g)
-        lab, blocks = od.labels(e, trk["n"])
-        _RAW[g] = (trk, lab, blocks, od.restarts(e, lab, blocks))
+        if isinstance(g, int):
+            e = od.events(g)
+            trk = od.tracking(g)
+            lab, blocks = od.labels(e, trk["n"])
+            _RAW[g] = (trk, lab, blocks, od.restarts(e, lab, blocks))
+        else:
+            from . import idsse
+            trk, lab, blocks = idsse.load(g)
+            _RAW[g] = (trk, lab, blocks, idsse.restarts(trk, lab, blocks))
     return _RAW[g]
 
 
@@ -51,7 +79,7 @@ def build_cases(scenarios=SCENARIOS, games=GAMES, seeds=(0,)):
         for g in games:
             trk, lab, blocks, rst = raw_game(g)
             for s in seeds:
-                dtrk, tags = dg.degrade(trk, lab, blocks, rst, dg.Scenario(seed=100 * g + s, **kw))
+                dtrk, tags = dg.degrade(trk, lab, blocks, rst, dg.Scenario(seed=seed_of(g) + s, **kw))
                 cases.append(dict(name=name, game=g, seed=s, trk=dtrk, tags=tags, lab=lab,
                                   blocks=blocks, gt=pm.label_codes(lab)))
     return cases
@@ -96,6 +124,15 @@ def baseline_labels(trk, window=50):
     return lab
 
 
+def per_game(rows, title):
+    print(title)
+    for g in dict.fromkeys(r[1] for r in rows):
+        rr = [r for r in rows if r[1] == g]
+        print("   {:8} spellF1 {:.3f}  macroF1 {:.3f}   poss pred/gt {:.0f}/{:.0f}".format(
+            str(g), np.mean([r[2] for r in rr]), np.mean([r[3] for r in rr]),
+            np.mean([r[4] for r in rr]), np.mean([r[5] for r in rr])))
+
+
 def summarise(rows, title):
     names = sorted({r[0] for r in rows}, key=list(SCENARIOS).index)
     print(title)
@@ -108,17 +145,24 @@ def summarise(rows, title):
         "ALL", np.mean([r[2] for r in rows]), np.mean([r[3] for r in rows])))
 
 
-TUNED_H3 = {"SWITCH_COST": 8, "TO_DEAD_COST": 24, "FROM_DEAD_COST": 24, "DEAD_BIAS": -0.5,
-            "GAP_LONG_W": 0.25, "GAP_MIN_S": 1, "OOB_W": 5, "SP_W": 2, "FAST_BALL_W": 1.5,
-            "FAST_BALL_SPEED": 2, "STRENGTH_CONTROL": 1, "STRENGTH_NEAR": 0, "STRENGTH_FAR": 0.05,
-            "CONTROL_DIST_M": 1, "DIFF_SCALE_M": 0.5, "FLIGHT_SPEED": 12, "FLIGHT_FACTOR": 0,
-            "TAG_W": 0.2}
-
 if __name__ == "__main__":
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--games", default="1,2,3", help="1,2,3 | metrica | idsse | all | J03WMX,2")
+    ap.add_argument("--scenarios", default=",".join(SCENARIOS))
+    ap.add_argument("--no-record", action="store_true", help="do not write extval/results/")
+    args = ap.parse_args()
     P = config.params()
-    cases = build_cases()
+    games, scen = parse_games(args.games), args.scenarios.split(",")
+    cases = build_cases(scenarios={k: SCENARIOS[k] for k in scen}, games=games)
     base = [(c["name"], c["game"]) + score(c["gt"], baseline_labels(c["trk"])) for c in cases]
     summarise(base, "BASELINE smooth50 (for reference: 0.2433 / 0.6724 on the real full match)")
+    per_game(base, "BASELINE per game")
     features_for(cases, P)
-    summarise(evaluate(cases, P), "OURS (config.py defaults)")
-    summarise(evaluate(cases, config.params(**TUNED_H3)), "OURS (tuned on the OLD simulator)")
+    ours = evaluate(cases, P)
+    summarise(ours, "OURS (config.py)")
+    per_game(ours, "OURS per game")
+    if not args.no_record:
+        from . import records
+        records.save("bench", games, scen, P,
+                     records.rows_from("baseline_smooth50", base) + records.rows_from("ours", ours))

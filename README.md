@@ -64,6 +64,7 @@ Measured with the scripts in `diagnostics/`, which print aggregates only and nev
 | Public five-minute ground truth | format and alignment check, figure in section 7; never used for tuning |
 | Organisers' baseline files | comparison only |
 | Metrica open sample games 1, 2, 3 | tuning and validation (section 6) |
+| IDSSE open dataset, 7 Bundesliga matches | out-of-sample validation only (section 6) |
 
 No labels of any kind were produced by hand, on any match.
 
@@ -148,6 +149,16 @@ loss is tied to stoppages.
 **Check of the bench.** The organisers' baseline scores 0.247 spellF1 on held-out game 3 of the
 bench and 0.2433 on the real full match, so the bench reproduces the real difficulty.
 
+**Out-of-sample check on seven other matches.** The parameters below were tuned on the three
+Metrica games only, then frozen and evaluated on the seven Bundesliga matches of the IDSSE open
+dataset (Bassek et al., Scientific Data 2025, CC-BY-4.0), never used for tuning. Their labels come
+from the DFL corrected tracking channels `BallStatus` and `BallPossession`, the same construction
+as the challenge ground truth; since that channel switches on every touch (25 to 37% of its spells
+last under 2 s), the same 3-second control rule is applied, giving 220 to 266 possessions per match
+with a mean of 10 to 15 s. Result, mean of four degradation scenarios: **0.601 spellF1** against
+**0.263** for the baseline, ahead on each of the seven matches (0.55 to 0.65).
+`python -m extval.bench --games idsse` reproduces it.
+
 **Tuning.** Coordinate descent over 25 parameters, objective the official spellF1 averaged over
 scenarios, scored with the unmodified `evaluation/possession_metrics.py`. Each game in turn is
 held out:
@@ -218,10 +229,18 @@ git clone https://github.com/metrica-sports/sample-data opendata/sample-data
 python -m extval.bench                      # baseline vs our pipeline on the degraded open games
 python -m extval.tune --holdout 3           # tune on games 1 and 2, score game 3
 python -m extval.tune                       # tune on all three: values in solution/config.py
+python -m extval.report                     # every evaluation record, per dataset
 python tools/make_method_gif.py             # docs/assets/method.gif
 python tools/make_figures.py                # docs/assets/pipeline.png, bench.png
 python tools/plot_public_window.py          # docs/assets/public_window.png
 ```
+
+The degradation is seeded, so the bench is reproducible. Every bench or tuning run writes its own
+record in `extval/results/` (git commit, games, scenarios, exact parameters and their hash, one row
+per game and scenario); records are never overwritten, and `python -m extval.report` aggregates
+them per dataset. Games are chosen with `--games`: `metrica` (the three sample games), `idsse`
+(seven Bundesliga matches of the IDSSE open dataset, loaded with `pip install kloppy==3.19.1 lxml`),
+`all`, or explicit ids.
 
 ## 10. Repository layout
 
