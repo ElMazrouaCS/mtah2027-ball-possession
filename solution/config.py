@@ -30,12 +30,12 @@ BALL_SMOOTH_FRAMES = 5
 COLLECTIVE_SMOOTH_FRAMES = 25
 
 # --------------------------------------------------------------------------- dead-ball evidence
-DEAD_BIAS = -0.5            # prior: play is alive more often than not
-GAP_MIN_S = 0.5             # ball missing for >= 3 s ...
+DEAD_BIAS = -0.5            # prior towards live play
+GAP_MIN_S = 0.5             # ball missing for at least this long (s) ...
 GAP_W = 1.0                 # ... adds this
-GAP_LONG_S = 20.0           # and for >= 10 s ...
-GAP_LONG_W = 0.25            # ... adds this on top
-SPEED_REF = 1.8             # m/s. Match median ~1.5, around restarts ~0.95 (diag_step2)
+GAP_LONG_S = 20.0           # and for at least this long (s) ...
+GAP_LONG_W = 0.25           # ... adds this on top
+SPEED_REF = 1.8             # m/s; collective speed below this counts towards a stoppage
 SPEED_SCALE = 0.5           # m/s per unit of evidence
 SPEED_W = 0.5               # weight of the collective-speed term (clipped to +/-2 units)
 OOB_MARGIN_M = 0.5          # ball this far past a line ...
@@ -57,7 +57,7 @@ STRENGTH_NEAR = 0.4
 STRENGTH_FAR = 0.0
 DIFF_SCALE_M = 0.5          # distance advantage (m) per unit of evidence, clipped to +/-2
 FLIGHT_SPEED = 8.0          # ball faster than this is passing by, not controlled ...
-FLIGHT_FACTOR = 0.0         # ... so its proximity evidence is damped
+FLIGHT_FACTOR = 0.0         # ... so its proximity evidence is multiplied by this (0 = ignored)
 TAG_W = 0.2                 # Smart Tagging phase team, per frame, weak
 TERR_W = 0.1                # where the play is (+1 deep in away half), seen from home's attack
 TERRV_W = 0.1               # how fast the play moves towards the away goal (m/s)
