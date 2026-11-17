@@ -62,3 +62,13 @@ __pycache__/
 venv/
 env/
 .DS_Store
+
+# -- N7_TACTIC ---------------------------------------------------------------------------------
+# parsed tracking cache (derived from the gated data: never published)
+cache/
+# Metrica open sample games, cloned locally for the validation bench
+opendata/
+# generated submission (regenerate with: python make_submission.py)
+/N7_TACTIC.csv
+
+.venv/
